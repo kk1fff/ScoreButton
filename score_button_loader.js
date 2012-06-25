@@ -3,6 +3,36 @@ var SCOREBUTTONUPDATE = undefined;
 
 (function() {
   //----------------------------------------------------------------------------
+  // Handle pending jobs.
+  //----------------------------------------------------------------------------
+
+  // Queue structure for pendding jobs.
+  var pendingQueue = [];
+  var withoutPending = false;
+
+  var runPendingJob = function() {
+    withoutPending = true;
+    for (var i = 0; i < pendingQueue.length; i++) {
+      var job = pendingQueue[i];
+      if (typeof job === 'function') {
+        job();
+      }
+    }
+  };
+
+  var addPendingJob = function(job) {
+    if (typeof job === 'function') {
+      if (withoutPending === false) {
+        pendingQueue.push(job);
+      } else {
+        job();
+      }
+    } else {
+      console.error("Pending job must be a function");
+    }
+  };
+
+  //----------------------------------------------------------------------------
   // Load required scripts
   //----------------------------------------------------------------------------
   var scoreServer = "http://localhost:5000/";
@@ -14,6 +44,22 @@ var SCOREBUTTONUPDATE = undefined;
   jq.setAttribute('type', 'text/javascript');
   (document.getElementsByTagName('head')[0]||
    document.getElementsByTagName('body')[0]).appendChild(jq);
+
+  // Setup to handle the event of script's loading.
+  if (jq.readyState) {
+    // For IE. Can IE follow the standard??
+    jq.onreadystatechange = function () {
+      if (jq.readyState == "loaded" || jq.readyState == "complete") {
+        script.onreadystatechange = null;
+        runPendingJob();
+      }
+    };
+  } else {
+    // Good browsers.
+    jq.onload = function () {
+      runPendingJob();
+    };
+  }
 
   // CSS
   var css = document.createElement('link');
@@ -27,11 +73,33 @@ var SCOREBUTTONUPDATE = undefined;
   //----------------------------------------------------------------------------
 
   // plus score by one
-  var plusScore = function(id) {
-    $.getJSON(scoreServer + "plus?id=" + id + "&callback=?",
-              function(d) {
-                console.log(d);
-              });
+  var plusScore = function(id, updateFunction) {
+    addPendingJob(function(){
+      $.getJSON(scoreServer + "plus?id=" + id + "&callback=?",
+                function(d) {
+                  updateFunction(d['score']);
+                });
+    });
+  };
+
+  // minus score by one
+  var minusScore = function(id, updateFunction) {
+    addPendingJob(function() {
+      $.getJSON(scoreServer + "minus?id=" + id + "&callback=?",
+                function(d) {
+                  updateFunction(d['score']);
+                });
+    });
+  };
+
+  // Get score without modifying it.
+  var getScore = function(id, updateFunction) {
+    addPendingJob(function() {
+      $.getJSON(scoreServer + "score?id=" + id + "&callback=?",
+                function(d) {
+                  updateFunction(d['score']);
+                });
+    });
   };
 
   // Build up button
@@ -40,8 +108,7 @@ var SCOREBUTTONUPDATE = undefined;
     btn.className = "button plus left";
     btn.innerHTML = "+";
     btn.addEventListener('click', function(e) {
-      console.log('add score');
-      plusScore(id);
+      plusScore(id, updateFunction);
     });
     return btn;
   }
@@ -51,6 +118,9 @@ var SCOREBUTTONUPDATE = undefined;
     var btn = document.createElement('div');
     btn.className = "button minus right";
     btn.innerHTML = "-";
+    btn.addEventListener('click', function(e) {
+      minusScore(id, updateFunction);
+    });
     return btn;
   }
 
@@ -92,6 +162,7 @@ var SCOREBUTTONUPDATE = undefined;
     var uf = updateScore.bind(score, score);
     var btnUp = buildUp(id, uf);
     var btnDown = buildDown(id, uf);
+    getScore(id, uf);
 
     td1.appendChild(btnUp);
     td2.appendChild(score);
