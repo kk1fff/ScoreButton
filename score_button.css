@@ -1,0 +1,66 @@
+.score-button {
+  width: 80px;
+  height: 20px;
+  display: block;
+  overflow: hidden;
+  background-color: #f0f0f0;
+
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+
+  border: #808080 1px solid;
+  vertical-align: center;
+}
+
+.score-button .layout-frame {
+  height: 100%;
+  float: left;
+  text-align: center;
+  background-color: #e0e0e0;
+  border: 0px;
+}
+
+.score-button .layout-frame .layout-cell {
+  padding: 0px;
+}
+
+.score-button .button {
+  vertical-align: middle;
+  height: 100%;
+  width: 24px;
+}
+
+.score-button .score {
+  vertical-align: middle;
+  height: 100%;
+  width: 30px;
+}
+
+.score-button .left {
+  border-right: #a0a0a0 1px solid;
+}
+
+.score-button .right {
+  border-left: #a0a0a0 1px solid;
+}
+
+.score-button .plus {
+  background-color: #f0c0c0;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.score-button .plus:hover {
+  background-color: #ff2020;
+}
+
+.score-button .minus {
+  background-color: #c0f0c0;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.score-button .minus:hover {
+  background-color: #20ff20;
+}
