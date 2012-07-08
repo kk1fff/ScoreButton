@@ -72,6 +72,11 @@ var SCOREBUTTONUPDATE = undefined;
   // End of loading script
   //----------------------------------------------------------------------------
 
+
+  //----------------------------------------------------------------------------
+  // Interact with server.
+  //----------------------------------------------------------------------------
+
   // plus score by one
   var plusScore = function(id, updateFunction) {
     addPendingJob(function(){

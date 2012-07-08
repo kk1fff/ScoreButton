@@ -9,6 +9,7 @@
     window['SCOREBUTTONLOADED'] = true;
 
     var jq = document.createElement('script');
+    // SCOREBUTTONLOADED will be replaced by script's absolute path.
     jq.setAttribute('src', SCOREBUTTONLOADER);
     jq.setAttribute('type', 'text/javascript');
     (document.getElementsByTagName('head')[0]||
