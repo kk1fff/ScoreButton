@@ -15,7 +15,7 @@ exports.getNumber = function(id) {
 // Connect to database.
 var initDb = function() {
   var mongoUrl = process.env["MONGOHQ_URL"] ||
-    "mongodb://localhost/sushi";
+    "mongodb://localhost/sushiaaa";
 
   console.log("Mongo URL: " + mongoUrl);
 };
