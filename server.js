@@ -53,7 +53,16 @@ app.get('/score_button.js', function(req, resp) {
 
 app.get('/score_button_loader.js', function(req, resp) {
   fs.readFile(__dirname + '/score_button_loader.js', 'utf8', function(err, data) {
+    var scorebuttonstyle_path = 
+      "http://" + req.headers.host + "/score_button.css";
     resp.setHeader('content-type', 'application/javascript; charset=utf-8');
+    resp.end(data.replace("SCOREBUTTONSTYLE", "\"" + scorebuttonstyle_path + "\""));
+  });
+});
+
+app.get('/score_button.css', function(req, resp) {
+  fs.readFile(__dirname + '/score_button.css', 'utf8', function(err, data) {
+    resp.setHeader('content-type', 'text/css; charset=utf-8');
     resp.end(data);
   });
 });

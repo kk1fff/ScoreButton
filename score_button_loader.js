@@ -33,6 +33,16 @@ var SCOREBUTTONUPDATE = undefined;
   };
 
   //----------------------------------------------------------------------------
+  // Load CSS
+  //----------------------------------------------------------------------------
+  var sty = document.createElement('link');
+  sty.setAttribute('href', SCOREBUTTONSTYLE);
+  sty.setAttribute('type', 'text/css');
+  sty.setAttribute('rel', 'stylesheet');
+  (document.getElementsByTagName('head')[0]||
+   document.getElementsByTagName('body')[0]).appendChild(sty);
+
+  //----------------------------------------------------------------------------
   // Load required scripts
   //----------------------------------------------------------------------------
   var scoreServer = "http://localhost:5000/";
