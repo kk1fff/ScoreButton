@@ -3,7 +3,8 @@ var fs      = require('fs');
 var url     = require('url');
 var dbCtrl  = require('./db_controller.js');
 
-var app = express.createServer(express.logger());
+var app = express();
+app.use(express.logger());
 
 var verifyScoreButtonId = function() {
   return true;
